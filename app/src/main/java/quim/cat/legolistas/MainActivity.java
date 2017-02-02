@@ -1,43 +1,38 @@
 package quim.cat.legolistas;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    public class Product extends HashMap<String, Object> {
-        public Product(String id, String name) {
-            this.put("id", id);
-            this.put("quantitat", name);
-        }
-    }
+    Lego Lego;
+    final LegoDownloader ld = new LegoDownloader(this);
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ListView llista1 = (ListView) findViewById(R.id.llista);
+        EditText codi1 = (EditText) findViewById(R.id.codi);
+        ImageButton search1 = (ImageButton) findViewById(R.id.search);
+        init();
 
-        ListView llista = (ListView) findViewById(R.id.llista);
-
-        List<Product> dades = new ArrayList<>();/*
-        dades.add(new Product("Disc dur 1TByte", 2, R.drawable.hdd));
-        dades.add(new Product("Monitor 25'", 2, R.drawable.lcd));*/
-
-        SimpleAdapter adapter = new SimpleAdapter(
-                MainActivity.this,
-                dades,
-                R.layout.llista_item,
-                new String[] { "name", "quantitat", "image" },
-                new int[] { R.id.nom, R.id.quantitat, R.id.imatge }
-        );
-        llista.setAdapter(adapter);
+        search1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ld.execute();
+            }
+        });
     }
-
+    public void init() {
+        Lego = new Lego();
+    }
 }
 
 

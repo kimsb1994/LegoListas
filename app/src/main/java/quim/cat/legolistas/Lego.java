@@ -4,81 +4,74 @@ package quim.cat.legolistas;
  * Created by DAM on 30/1/17.
  */
 
-import android.content.Context;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import android.content.Context;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class Lego {
-
-    public class Kit {
-        String id;
-        String name;
-    }
-
-    private String time;
-    private ArrayList<Kit> legos;
+    private long id;
+    private String id_piece;
+    private String nombre;
+    private String image;
+    private int cantidad;
 
     public Lego() {
-        time = null;
-        legos = new ArrayList<Kit>();
     }
 
-    public String getTime() { return time; }
-    public ArrayList<Kit> getKit() { return this.legos; }
-
-    public Kit getKit(String num) {
-        for(Kit k : legos) {
-            if (k.id.equals(num)) return k;
-        }
-        return null;
-    }
-    public int getPosition(String id) {
-        return legos.indexOf(getKit(id));
+    public Lego(long id, String id_piece, String nombre, String image, int cantidad) {
+        this.id = id;
+        this.id_piece = id_piece;
+        this.nombre = nombre;
+        this.image = image;
+        this.cantidad = cantidad;
     }
 
-    public boolean loadFromFile(Context context) {
-        BufferedReader reader = null;
-        try {
-            File dir = context.getExternalFilesDir(null);
-            if (dir == null) return false;
-            File f = new File(dir, "kit.csv");
-            if (!f.exists()) return false;
-            reader = new BufferedReader(new FileReader(f));
-            time = reader.readLine();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length != 2) continue;
-                Kit k = new Kit();
-                k.id = parts[0];
-                k.name = parts[1];
-                legos.add(k);
-            }
-            return true;
-        }
-        catch(Exception e) {
-            Log.e("flx", "ERROR : " + e);
-            return false;
-        }
-        finally {
-            if (reader != null) {
-                try { reader.close(); }
-                catch (IOException e) { }
-            }
-        }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getId_piece() {
+        return id_piece;
+    }
+
+    public void setId_piece(String id_piece) {
+        this.id_piece = id_piece;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    @Override
+    public String toString() {
+        return "Lego{" +
+                "id=" + id +
+                ", id_piece='" + id_piece + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", image='" + image + '\'' +
+                ", cantidad=" + cantidad +
+                '}';
     }
 }
 

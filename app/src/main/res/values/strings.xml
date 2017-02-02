@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">LegoListas</string>
+    <string name="app_name">Lego</string>
+    <string name="action_update_lego">Update Lego</string>
+    <string name="error_download">Error downloading data</string>
+    <string name="please_wait">Please wait;</string>
+    <string name="updating_lego">Updating Lego ;</string>
+    <string name="update_lego_title">Update the Lego?</string>
+    <string name="last_update_message">Last time the lego where updated
+        was on @. Do you want to download an updated version?</string>
+    <string name="button_download">Download</string>
+    <string name="button_not_now">Not now</string>
+    <string name="notify_empty_file_title">Unable to download!</string>
+    <string name="notify_empty_file_message">Cannot download lego database for the first time. Spinners will be empty until a database download has been accomplished.</string>
+
 </resources>
