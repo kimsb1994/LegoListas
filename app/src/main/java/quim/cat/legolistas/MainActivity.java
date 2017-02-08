@@ -13,7 +13,8 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity {
 
     Lego Lego;
-    final LegoDownloader ld = new LegoDownloader(this);
+    private ListView llista1;
+    final LegoDownloader ld = new LegoDownloader(llista1,this);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
         EditText codi1 = (EditText) findViewById(R.id.codi);
         ImageButton search1 = (ImageButton) findViewById(R.id.search);
         init();
-
+        final String textoCodigo = codi1.toString();
         search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ld.execute();
+                ld.execute(textoCodigo);
             }
         });
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,15 +14,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static quim.cat.legolistas.R.id.codi;
 
-public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
+
+public class LegoDownloader extends AsyncTask<String, String, Boolean> {
 
     private Context context;
     public LegoDownloader(ListView ListView, Context context) {
         this.context = context;
     }
 
-    private ProgressDialog pDialog;
+   private ProgressDialog pDialog;
 
 
 
@@ -38,10 +41,10 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
         pDialog.setCancelable(true);
         pDialog.show();
     }
-    @Override protected Boolean doInBackground(Void... voids) {
+    @Override protected Boolean doInBackground(String...params) {
         int count;
         try {
-            URL url = new URL("http://stucom.flx.cat/lego/get_set_parts.php?set=60115-1&key=7654a5cd136677650d93cd77af591956");
+            URL url = new URL("http://stucom.flx.cat/lego/get_set_parts.php?set=65012-1&key=7654a5cd136677650d93cd77af591956");
             URLConnection connection = url.openConnection();
             connection.connect();
             int lengthOfFile = connection.getContentLength();
