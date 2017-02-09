@@ -8,29 +8,42 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
+
 
 
 public class MainActivity extends AppCompatActivity {
 
     Lego Lego;
-    private ListView llista1;
-    final LegoDownloader ld = new LegoDownloader(llista1,this);
+    Spinner llista1;
+    EditText codi1;
+    ImageButton search1;
+    LegoDownloader ld;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ListView llista1 = (ListView) findViewById(R.id.llista);
-        EditText codi1 = (EditText) findViewById(R.id.codi);
-        ImageButton search1 = (ImageButton) findViewById(R.id.search);
+
+        llista1 = (Spinner) findViewById(R.id.spinner);
+        codi1 = (EditText) findViewById(R.id.codi);
+        search1 = (ImageButton) findViewById(R.id.search);
         init();
-        final String textoCodigo = codi1.toString();
         search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ld.execute(textoCodigo);
+                downloaderPack(codi1,llista1);
             }
         });
+
     }
+
+    private void downloaderPack(EditText codi, Spinner llisteta) {
+        String textCodi = codi.getText().toString();
+        ld = new LegoDownloader(this, textCodi, llisteta);
+        ld.execute();
+    }
+
+
     public void init() {
         Lego = new Lego();
     }
