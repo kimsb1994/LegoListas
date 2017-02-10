@@ -15,7 +15,7 @@ import android.widget.Spinner;
 public class MainActivity extends AppCompatActivity {
 
     Lego Lego;
-    Spinner llista1;
+    ListView llista1;
     EditText codi1;
     ImageButton search1;
     LegoDownloader ld;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        llista1 = (Spinner) findViewById(R.id.spinner);
+        llista1 = (ListView) findViewById(R.id.llista);
         codi1 = (EditText) findViewById(R.id.codi);
         search1 = (ImageButton) findViewById(R.id.search);
         init();
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void downloaderPack(EditText codi, Spinner llisteta) {
+    private void downloaderPack(EditText codi, ListView llisteta) {
         String textCodi = codi.getText().toString();
         ld = new LegoDownloader(this, textCodi, llisteta);
         ld.execute();

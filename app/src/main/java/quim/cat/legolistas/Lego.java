@@ -38,6 +38,11 @@ public class Lego {
         this.rb_color_id = rb_color_id;
         this.part_type_id = part_type_id;
     }
+    public Lego(String part_name,String qty,String part_img_url){
+        this.part_name = part_name;
+        this.qty = qty;
+        this.part_img_url = part_img_url;
+    }
 
     public String getPart_id() {
         return part_id;
