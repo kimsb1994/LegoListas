@@ -1,5 +1,6 @@
 package quim.cat.legolistas;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -47,6 +48,14 @@ public class PiezaActivity extends AppCompatActivity {
         volver = (ImageButton) findViewById(R.id.volver);
         CatalogAdapter2 adapter = new CatalogAdapter2(context,dades2,posicion);
         llista.setAdapter(adapter);
+
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(MainActivity);
+            }
+        });
     }
 }
 

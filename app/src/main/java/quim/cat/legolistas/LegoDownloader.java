@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -120,6 +121,7 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
         CatalogAdapter adapter = new CatalogAdapter(context, dades2);
         pDialog.dismiss();
         llista.setAdapter(adapter);
+
     }
 }
 

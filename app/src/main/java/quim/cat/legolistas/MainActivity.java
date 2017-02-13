@@ -1,6 +1,7 @@
 package quim.cat.legolistas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,21 +42,21 @@ public class MainActivity extends AppCompatActivity {
                 downloaderPack(codi1,llista1);
             }
         });
-        llista1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        llista1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "Click en " + id, Toast.LENGTH_SHORT).show();
+            }
 
-
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(MainActivity.this, "Click fora", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void downloaderPack(EditText codi, ListView llisteta) {
-        String textCodi = codi.getText().toString();
-        ld = new LegoDownloader(this, textCodi, llisteta);
-        ld.execute();
-    }
-    private void downloaderPack2(EditText codi, ListView llisteta) {
         String textCodi = codi.getText().toString();
         ld = new LegoDownloader(this, textCodi, llisteta);
         ld.execute();
