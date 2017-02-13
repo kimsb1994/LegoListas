@@ -2,40 +2,49 @@ package quim.cat.legolistas;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static quim.cat.legolistas.R.id.imatge;
+
 
 public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
-
     private String textCodi;
     private Context context;
     private ListView llista;
-    private List<Lego> dades2 = new ArrayList<>();
+    public static List<Lego> dades2 = new ArrayList<>();
     public LegoDownloader(Context context, String textCodi,ListView llista) {
         this.context = context;
         this.textCodi = textCodi;
         this.llista = llista;
-
     }
 
    private ProgressDialog pDialog;
-
-
 
     @Override protected void onPreExecute() {
         pDialog = new ProgressDialog(context);
@@ -53,6 +62,7 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
     @Override protected Boolean doInBackground(Void... params) {
         int count;
         try {
+            String palabra = "entra que si";
             Log.e("CODIGO: ",textCodi);
             URL url = new URL("http://stucom.flx.cat/lego/get_set_parts.php?set="+textCodi+"&key=7654a5cd136677650d93cd77af591956");
             URLConnection connection = url.openConnection();
@@ -70,73 +80,47 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
             }
             input.close();
             output.flush();
+            /* FINAL DEL CONNECT*/
             String xml = new String(output.toByteArray());
-            //Log.e("xml: ", xml);
-            File dir = context.getExternalFilesDir(null);
-            if (dir == null) return false;
-            File f = new File(dir, "currencies.csv");
-            if (!f.exists()) return false;
             BufferedReader reader = null;
-            reader = new BufferedReader(new FileReader(f));
+            reader = new BufferedReader(new StringReader(xml));
             String line;
             List<Lego> dades1 = new ArrayList<>();
-            Log.e("aqui si","que si");
+
+            // Log.e("xml: ", xml);
             while ((line = reader.readLine()) != null) {
-                Log.e("aqui si2", "siiii");
                 String[] parts = line.split("\n");
                 for(String string :parts){
                     String [] parts2 =line.split("\t");
-                        Lego l1 = new Lego(parts2[0], parts2[1], parts2[2], parts2[3], parts2[4], parts2[5], parts2[6], parts2[7], parts2[8], parts2[9], parts2[10]);
-                        Lego l2 = new Lego(parts2[4], parts2[1], parts2[6]);
-
-                        Log.e("Penis:", parts2[0]);
-                        //if(!parts2[0].equalsIgnoreCase("part_id")){
+                        if(!parts2[0].equalsIgnoreCase("part_id")) {
+                            Bitmap loadedImage = null;
+                            try {
+                                URL imageUrl = new URL(parts2[6]);
+                                HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+                                conn.connect();
+                                loadedImage = BitmapFactory.decodeStream(conn.getInputStream());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Lego l1 = new Lego(parts2[0], parts2[1], parts2[2], parts2[3], parts2[4], parts2[5], parts2[6], parts2[7], parts2[8], parts2[9], parts2[10], loadedImage);
+                            Log.e("IF: ", parts2[0]);
                             dades2.add(l1);
-                        //}
+                        }
                 }
             }
-            f = new File(dir, "lego.csv");
-            f.delete();
-
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
             return false;
         }
         return true;
     }
+
+
     @Override public void onPostExecute(Boolean result) {
-
+        CatalogAdapter adapter = new CatalogAdapter(context, dades2);
         pDialog.dismiss();
-        llenarLista();
-    }
-    public class Piezas extends HashMap<String,Object> {
-        public Piezas(String part_name, String qty, String part_img_url){
-            this.put("part_name",part_name);
-            this.put("qty",qty);
-            this.put("part_img_url",part_img_url);
-        }
-    }
-
-    private void llenarLista(){
-
-        List<Piezas> piezas = new ArrayList<>();
-        for(Lego l:  dades2){
-            Piezas pieza = new Piezas(l.getPart_name(),l.getQty(),l.getPart_img_url());
-            piezas.add(pieza);
-        }
-        SimpleAdapter adapter = new SimpleAdapter(
-                context,
-                piezas,
-                R.layout.llista_item,
-                new String[] { "part_name", "qty", "part_img_url" },
-                new int[] { R.id.nom, R.id.quantity, R.id.image }
-        );
         llista.setAdapter(adapter);
     }
-
-
-
-
 }
 
 

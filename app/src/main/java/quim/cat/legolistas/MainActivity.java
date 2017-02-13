@@ -5,11 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     EditText codi1;
     ImageButton search1;
     LegoDownloader ld;
+    ImageView imatge2;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         llista1 = (ListView) findViewById(R.id.llista);
         codi1 = (EditText) findViewById(R.id.codi);
         search1 = (ImageButton) findViewById(R.id.search);
+        imatge2 = (ImageView) findViewById(R.id.imatge);
+        imatge2 = (ImageView) findViewById(R.id.volver);
         init();
         search1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,7 +41,13 @@ public class MainActivity extends AppCompatActivity {
                 downloaderPack(codi1,llista1);
             }
         });
+        llista1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
+            }
+        });
     }
 
     private void downloaderPack(EditText codi, ListView llisteta) {
@@ -42,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
         ld = new LegoDownloader(this, textCodi, llisteta);
         ld.execute();
     }
+    private void downloaderPack2(EditText codi, ListView llisteta) {
+        String textCodi = codi.getText().toString();
+        ld = new LegoDownloader(this, textCodi, llisteta);
+        ld.execute();
+    }
+
 
 
     public void init() {

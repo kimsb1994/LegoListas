@@ -1,13 +1,11 @@
 package quim.cat.legolistas;
 
-/**
- * Created by DAM on 30/1/17.
- */
+import android.graphics.Bitmap;
 
-
-    //Part_id /Qty //Ldraw_color_id/Type/Part_name/Color_name/Part_img_url/Element_id/Element_img_url/Rb_color_id/Part_type_id
+//Part_id /Qty //Ldraw_color_id/Type/Part_name/Color_name/Part_img_url/Element_id/Element_img_url/Rb_color_id/Part_type_id
 
 public class Lego {
+    private Bitmap image;
     private String part_id;
     private String qty;
     private String ldraw_color_id;
@@ -19,13 +17,14 @@ public class Lego {
     private String element_img_url;
     private String rb_color_id;
     private String part_type_id;
+    private Bitmap bitmap;
 
 
 
     public Lego() {
     }
 
-    public Lego(String part_id, String qty, String ldraw_color_id, String type, String part_name, String color_name, String part_img_url, String element_id, String element_img_url, String rb_color_id, String part_type_id) {
+    public Lego(String part_id, String qty, String ldraw_color_id, String type, String part_name, String color_name, String part_img_url, String element_id, String element_img_url, String rb_color_id, String part_type_id, Bitmap bitmap) {
         this.part_id = part_id;
         this.qty = qty;
         this.ldraw_color_id = ldraw_color_id;
@@ -37,11 +36,34 @@ public class Lego {
         this.element_img_url = element_img_url;
         this.rb_color_id = rb_color_id;
         this.part_type_id = part_type_id;
+        this.bitmap = bitmap;
     }
     public Lego(String part_name,String qty,String part_img_url){
         this.part_name = part_name;
         this.qty = qty;
         this.part_img_url = part_img_url;
+    }
+    public Lego (String part_name,String qty,String part_img_url, Bitmap image){
+        this.part_name=part_name;
+        this.qty = qty;
+        this.part_img_url = part_img_url;
+        this.image= image;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
     public String getPart_id() {
@@ -84,7 +106,7 @@ public class Lego {
         this.part_name = part_name;
     }
 
-    public String getColor_name() {
+    public String getColor_name(int position) {
         return color_name;
     }
 
@@ -133,6 +155,52 @@ public class Lego {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lego lego = (Lego) o;
+
+        if (image != null ? !image.equals(lego.image) : lego.image != null) return false;
+        if (part_id != null ? !part_id.equals(lego.part_id) : lego.part_id != null) return false;
+        if (qty != null ? !qty.equals(lego.qty) : lego.qty != null) return false;
+        if (ldraw_color_id != null ? !ldraw_color_id.equals(lego.ldraw_color_id) : lego.ldraw_color_id != null)
+            return false;
+        if (type != null ? !type.equals(lego.type) : lego.type != null) return false;
+        if (part_name != null ? !part_name.equals(lego.part_name) : lego.part_name != null)
+            return false;
+        if (color_name != null ? !color_name.equals(lego.color_name) : lego.color_name != null)
+            return false;
+        if (part_img_url != null ? !part_img_url.equals(lego.part_img_url) : lego.part_img_url != null)
+            return false;
+        if (element_id != null ? !element_id.equals(lego.element_id) : lego.element_id != null)
+            return false;
+        if (element_img_url != null ? !element_img_url.equals(lego.element_img_url) : lego.element_img_url != null)
+            return false;
+        if (rb_color_id != null ? !rb_color_id.equals(lego.rb_color_id) : lego.rb_color_id != null)
+            return false;
+        return part_type_id != null ? part_type_id.equals(lego.part_type_id) : lego.part_type_id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = image != null ? image.hashCode() : 0;
+        result = 31 * result + (part_id != null ? part_id.hashCode() : 0);
+        result = 31 * result + (qty != null ? qty.hashCode() : 0);
+        result = 31 * result + (ldraw_color_id != null ? ldraw_color_id.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (part_name != null ? part_name.hashCode() : 0);
+        result = 31 * result + (color_name != null ? color_name.hashCode() : 0);
+        result = 31 * result + (part_img_url != null ? part_img_url.hashCode() : 0);
+        result = 31 * result + (element_id != null ? element_id.hashCode() : 0);
+        result = 31 * result + (element_img_url != null ? element_img_url.hashCode() : 0);
+        result = 31 * result + (rb_color_id != null ? rb_color_id.hashCode() : 0);
+        result = 31 * result + (part_type_id != null ? part_type_id.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Lego{" +
                 "part_id='" + part_id + '\'' +
@@ -148,5 +216,8 @@ public class Lego {
                 ", part_type_id='" + part_type_id + '\'' +
                 '}';
     }
+
+
+
 }
 
