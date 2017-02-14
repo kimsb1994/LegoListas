@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,18 +35,16 @@ import java.util.List;
 import static quim.cat.legolistas.R.id.imatge;
 
 
-public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
-    private String textCodi;
+public class SpinnerDownloader extends AsyncTask<Void, String, Boolean> {
     private Context context;
-    private ListView llista;
-    public static List<Lego> dades2 = new ArrayList<>();
-    public LegoDownloader(Context context, String textCodi,ListView llista) {
+    private Spinner spinner;
+    public static List<Lego> dadesId = new ArrayList<>();
+    public SpinnerDownloader(Context context,Spinner spinner) {
         this.context = context;
-        this.textCodi = textCodi;
-        this.llista = llista;
+        this.spinner = spinner;
     }
 
-   private ProgressDialog pDialog;
+    private ProgressDialog pDialog;
 
     @Override protected void onPreExecute() {
         pDialog = new ProgressDialog(context);
@@ -63,9 +62,7 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
     @Override protected Boolean doInBackground(Void... params) {
         int count;
         try {
-            String palabra = "entra que si";
-            Log.e("CODIGO: ",textCodi);
-            URL url = new URL("http://stucom.flx.cat/lego/get_set_parts.php?set="+textCodi+"&key=7654a5cd136677650d93cd77af591956");
+            URL url = new URL("https://rebrickable.com/api/v3/lego/sets/?key=Qn4rj6Z506");
             URLConnection connection = url.openConnection();
             connection.connect();
             int lengthOfFile = connection.getContentLength();
@@ -83,31 +80,18 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
             output.flush();
             /* FINAL DEL CONNECT*/
             String xml = new String(output.toByteArray());
+            Log.e("hola: ",xml);
             BufferedReader reader = null;
             reader = new BufferedReader(new StringReader(xml));
             String line;
-            List<Lego> dades1 = new ArrayList<>();
-
-            // Log.e("xml: ", xml);
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\n");
                 for(String string :parts){
                     String [] parts2 =line.split("\t");
-                        if(!parts2[0].equalsIgnoreCase("part_id")) {
-                            Bitmap loadedImage = null;
-                            if(parts2[6]!=null){
-                            try {
-                                URL imageUrl = new URL(parts2[6]);
-                                HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
-                                conn.connect();
-                                loadedImage = BitmapFactory.decodeStream(conn.getInputStream());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }}
-                            Lego l1 = new Lego(parts2[0], parts2[1], parts2[2], parts2[3], parts2[4], parts2[5], parts2[6], parts2[7], parts2[8], parts2[9], parts2[10], loadedImage);
-                            Log.e("IF: ", parts2[0]);
-                            dades2.add(l1);
-                        }
+                    if(!parts2[0].equalsIgnoreCase("part_id")) {
+                        Lego l1 = new Lego(parts2[0]);
+                        dadesId.add(l1);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -117,11 +101,12 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
         return true;
     }
 
+    public static List<Lego> getDadesId() {
+        return dadesId;
+    }
 
     @Override public void onPostExecute(Boolean result) {
-        CatalogAdapter adapter = new CatalogAdapter(context, dades2);
         pDialog.dismiss();
-        llista.setAdapter(adapter);
 
     }
 }

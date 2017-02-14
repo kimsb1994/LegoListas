@@ -23,6 +23,9 @@ public class Lego {
 
     public Lego() {
     }
+    public Lego(String part_id) {
+        this.part_id = part_id;
+    }
 
     public Lego(String part_id, String qty, String ldraw_color_id, String type, String part_name, String color_name, String part_img_url, String element_id, String element_img_url, String rb_color_id, String part_type_id, Bitmap bitmap) {
         this.part_id = part_id;
