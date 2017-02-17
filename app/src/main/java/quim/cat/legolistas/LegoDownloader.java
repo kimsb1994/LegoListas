@@ -63,8 +63,6 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
     @Override protected Boolean doInBackground(Void... params) {
         int count;
         try {
-            String palabra = "entra que si";
-            Log.e("CODIGO: ",textCodi);
             URL url = new URL("http://stucom.flx.cat/lego/get_set_parts.php?set="+textCodi+"&key=7654a5cd136677650d93cd77af591956");
             URLConnection connection = url.openConnection();
             connection.connect();
@@ -88,7 +86,6 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
             String line;
             List<Lego> dades1 = new ArrayList<>();
 
-            // Log.e("xml: ", xml);
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\n");
                 for(String string :parts){
@@ -105,7 +102,7 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
                                 e.printStackTrace();
                             }}
                             Lego l1 = new Lego(parts2[0], parts2[1], parts2[2], parts2[3], parts2[4], parts2[5], parts2[6], parts2[7], parts2[8], parts2[9], parts2[10], loadedImage);
-                            Log.e("IF: ", parts2[0]);
+
                             dades2.add(l1);
                         }
                 }
@@ -117,6 +114,9 @@ public class LegoDownloader extends AsyncTask<Void, String, Boolean> {
         return true;
     }
 
+    public static List<Lego> getDades2() {
+        return dades2;
+    }
 
     @Override public void onPostExecute(Boolean result) {
         CatalogAdapter adapter = new CatalogAdapter(context, dades2);

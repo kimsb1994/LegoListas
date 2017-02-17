@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     ImageButton search1;
     LegoDownloader ld;
     SpinnerDownloader sd;
+    PiezaActivity pa;
     ImageView imatge2;
     Spinner spinner;
+    List<Lego> listaSpinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,30 +43,36 @@ public class MainActivity extends AppCompatActivity {
         imatge2 = (ImageView) findViewById(R.id.imatge);
         imatge2 = (ImageView) findViewById(R.id.volver);
         init();
-
         search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloaderPack(codi1,llista1);
+
+                String textCodi = codi1.getText().toString();
+                downloaderPack(textCodi,llista1);
             }
         });
         downloadSpinner();
-        llista1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Click en " + id, Toast.LENGTH_SHORT).show();
-            }
 
+        llista1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(MainActivity.this, "Click fora", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, PiezaActivity.class);
+
+                List<Lego> dades2 = ld.getDades2();
+                intent.putExtra("id", dades2.get(position).getPart_id());
+                intent.putExtra("name", dades2.get(position).getPart_name());
+                intent.putExtra("type", dades2.get(position).getType());
+                intent.putExtra("color", dades2.get(position).getLdraw_color_id());
+                intent.putExtra("image", dades2.get(position).getPart_img_url());
+                startActivity(intent);
             }
         });
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                updateSpinners();
+                listaSpinner = sd.getDadesId();
+                String codigo = listaSpinner.get(i).getPart_id();
+                downloaderPack(codigo,llista1);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -73,29 +81,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void downloaderPack(EditText codi, ListView llisteta) {
-        String textCodi = codi.getText().toString();
-        ld = new LegoDownloader(this, textCodi, llisteta);
+    private void downloaderPack(String codi, ListView llisteta) {
+        ld = new LegoDownloader(this, codi, llisteta);
         ld.execute();
     }
     public void downloadSpinner() {
         sd = new SpinnerDownloader(this,spinner);
         sd.execute();
-    }
-
-    public void updateSpinners() {
-        List<Lego> dadesId = SpinnerDownloader.getDadesId();
-        Log.d("hola", String.valueOf(dadesId.get(0)));
-        SpinnerCursor cursor = new SpinnerCursor(dadesId);
-        SimpleCursorAdapter adapter;
-        adapter = new SimpleCursorAdapter(
-                this,
-                R.layout.spinner_item,
-                cursor,
-                new String[]{"Name"},
-                new int[]{R.id.textView1},
-                0);
-        spinner.setAdapter(adapter);
     }
     public void init() {
         Lego = new Lego();

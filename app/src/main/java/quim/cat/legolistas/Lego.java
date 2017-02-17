@@ -53,6 +53,15 @@ public class Lego {
         this.image= image;
     }
 
+    public Lego(String id, String name, String type, String color, String image) {
+        this.part_id = part_id;
+        this.part_name = part_name;
+        this.type = type;
+        this.rb_color_id = rb_color_id;
+        this.element_img_url = element_img_url;
+
+    }
+
     public Bitmap getImage() {
         return image;
     }

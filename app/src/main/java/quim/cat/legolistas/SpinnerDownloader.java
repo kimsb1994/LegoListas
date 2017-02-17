@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +63,7 @@ public class SpinnerDownloader extends AsyncTask<Void, String, Boolean> {
     @Override protected Boolean doInBackground(Void... params) {
         int count;
         try {
-            URL url = new URL("https://rebrickable.com/api/v3/lego/sets/?key=Qn4rj6Z506");
+            URL url = new URL("http://stucom.flx.cat/lego/search.php?query=&key=7654a5cd136677650d93cd77af591956");
             URLConnection connection = url.openConnection();
             connection.connect();
             int lengthOfFile = connection.getContentLength();
@@ -80,7 +81,6 @@ public class SpinnerDownloader extends AsyncTask<Void, String, Boolean> {
             output.flush();
             /* FINAL DEL CONNECT*/
             String xml = new String(output.toByteArray());
-            Log.e("hola: ",xml);
             BufferedReader reader = null;
             reader = new BufferedReader(new StringReader(xml));
             String line;
@@ -106,8 +106,23 @@ public class SpinnerDownloader extends AsyncTask<Void, String, Boolean> {
     }
 
     @Override public void onPostExecute(Boolean result) {
+        updateSpinners();
         pDialog.dismiss();
 
+    }
+
+
+    public void updateSpinners() {
+        SpinnerCursor cursor = new SpinnerCursor(dadesId);
+        SimpleCursorAdapter adapter;
+        adapter = new SimpleCursorAdapter(
+                context,
+                R.layout.spinner_item,
+                cursor,
+                new String[]{"part_id"},
+                new int[]{R.id.textView1},
+                0);
+        spinner.setAdapter(adapter);
     }
 }
 

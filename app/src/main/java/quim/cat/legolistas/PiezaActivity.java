@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,39 +11,45 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class PiezaActivity extends AppCompatActivity {
-
-    List<Lego> dades2 = LegoDownloader.dades2;
-    public PiezaActivity(Context context, int posicion) {
-        this.context = context;
-        this.posicion = posicion;
+    public PiezaActivity() {
     }
     private ListView llista;
     private Context context;
     private int posicion;
     private ImageButton volver;
+    Intent in = this.getIntent();
+    String id = in.getStringExtra("id");
+    String name = in.getStringExtra("name");
+    String type = getIntent().getStringExtra("type");
+    String color = getIntent().getStringExtra("color");
+    String image = getIntent().getStringExtra("image");
+
+    List<String> dades2 = new ArrayList<>();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectlego);
+        dades2.add(id);
+        dades2.add(name);
+        dades2.add(type);
+        dades2.add(color);
+        dades2.add(image);
+
+
         volver = (ImageButton) findViewById(R.id.volver);
         CatalogAdapter2 adapter = new CatalogAdapter2(context,dades2,posicion);
         llista.setAdapter(adapter);
@@ -52,20 +57,20 @@ public class PiezaActivity extends AppCompatActivity {
         volver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent MainActivity = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(MainActivity);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("parametro", "string");
+                startActivity(intent);
             }
         });
     }
 }
-
 class CatalogAdapter2 extends BaseAdapter {
     private Context context;
-    private List<Lego> dades2;
+    private List<String> dades2;
     private int posicion;
 
 
-    public CatalogAdapter2(Context context, List<Lego> dades2, int posicion) {
+    public CatalogAdapter2(Context context, List<String> dades2, int posicion) {
         this.context = context;
         this.dades2 = dades2;
         this.posicion = posicion;
@@ -101,17 +106,25 @@ class CatalogAdapter2 extends BaseAdapter {
             myView.setTag(holder);
         }
         ViewHolder holder = (ViewHolder) myView.getTag();
+        Bitmap loadedImage = null;
+        try {
+            URL imageUrl = new URL(dades2.get(5));
+            HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+            conn.connect();
+            loadedImage = BitmapFactory.decodeStream(conn.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Lego lego = dades2.get(position);
-        Bitmap image = lego.getBitmap();
+        Bitmap image = loadedImage;
         holder.imImage.setImageBitmap(image);
-        String id = lego.getPart_name();
+        String id = dades2.get(1);
         holder.tvid.setText(id);
-        String name = lego.getPart_name();
+        String name = dades2.get(2);
         holder.tvnom.setText(name);
-        String color = lego.getPart_name();
+        String color = dades2.get(4);
         holder.tvColor.setText(color);
-        String type = String.valueOf(lego.getQty());
+        String type = dades2.get(3);
         holder.tvType.setText(type);
         return myView;
     }
